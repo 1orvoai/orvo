@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — ORVO</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="/assets/js/theme.js"></script>
+</head>
+<body>
+
+<div id="orvo-splash">
+  <div class="orvo-logo-text">ORVO</div>
+  <div class="orvo-splash-sub">AI Trading Platform</div>
+</div>
+
+<div class="flex min-h-screen">
+  <aside id="orvo-shell-sidebar" class="w-64 flex-shrink-0 border-r hidden md:flex md:flex-col" style="border-color:var(--border-color)"></aside>
+
+  <div class="flex-1 min-w-0">
+    <header id="orvo-shell-topbar" class="px-6 py-4 border-b" style="border-color:var(--border-color)"></header>
+
+    <main class="p-6 space-y-6">
+      <h1 class="text-2xl font-bold">Admin Panel</h1>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="health-cards">
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">System Status</div><div id="health-status" class="text-xl font-bold mt-1">—</div></div>
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Total Users</div><div id="health-users" class="text-xl font-bold mt-1">—</div></div>
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Active Broker Conns</div><div id="health-conns" class="text-xl font-bold mt-1">—</div></div>
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Open Trades</div><div id="health-trades" class="text-xl font-bold mt-1">—</div></div>
+      </div>
+
+      <div class="card p-5">
+        <h2 class="font-semibold mb-4">User Management</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead><tr class="text-left" style="color:var(--text-secondary)">
+              <th class="pb-2">Name</th><th class="pb-2">Email</th><th class="pb-2">Role</th>
+              <th class="pb-2">Status</th><th class="pb-2">Joined</th><th class="pb-2"></th>
+            </tr></thead>
+            <tbody id="users-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card p-5">
+        <h2 class="font-semibold mb-4">Broker Connection Monitoring</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead><tr class="text-left" style="color:var(--text-secondary)">
+              <th class="pb-2">User ID</th><th class="pb-2">Type</th><th class="pb-2">Status</th>
+              <th class="pb-2">Last Error</th><th class="pb-2">Last Checked</th>
+            </tr></thead>
+            <tbody id="conns-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card p-5">
+        <h2 class="font-semibold mb-4">System Logs</h2>
+        <div class="overflow-x-auto max-h-96 overflow-y-auto">
+          <table class="w-full text-sm">
+            <thead><tr class="text-left" style="color:var(--text-secondary)">
+              <th class="pb-2">Time</th><th class="pb-2">Action</th><th class="pb-2">Detail</th><th class="pb-2">Level</th>
+            </tr></thead>
+            <tbody id="logs-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/app-shell.js"></script>
+<script>
+async function loadHealth() {
+  const h = await ORVO_API.get("/api/admin/health");
+  document.getElementById("health-status").textContent = h.status;
+  document.getElementById("health-users").textContent = h.total_users;
+  document.getElementById("health-conns").textContent = h.active_broker_connections;
+  document.getElementById("health-trades").textContent = h.open_trades;
+}
+
+async function loadUsers() {
+  const users = await ORVO_API.get("/api/admin/users");
+  document.getElementById("users-body").innerHTML = users.map((u) => `
+    <tr class="border-t" style="border-color:var(--border-color)">
+      <td class="py-2">${u.full_name}</td>
+      <td class="py-2">${u.email}</td>
+      <td class="py-2"><span class="badge badge-neutral">${u.role}</span></td>
+      <td class="py-2"><span class="badge ${u.is_active ? 'badge-success' : 'badge-danger'}">${u.is_active ? 'active' : 'disabled'}</span></td>
+      <td class="py-2" style="color:var(--text-secondary)">${new Date(u.created_at).toLocaleDateString()}</td>
+      <td class="py-2"><button class="text-sm toggle-active-btn" data-id="${u.id}" style="color:var(--accent)">${u.is_active ? 'Disable' : 'Enable'}</button></td>
+    </tr>
+  `).join("");
+  document.querySelectorAll(".toggle-active-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      await ORVO_API.put(`/api/admin/users/${btn.dataset.id}/toggle-active`);
+      loadUsers();
+    });
+  });
+}
+
+async function loadConnections() {
+  const conns = await ORVO_API.get("/api/admin/broker-connections");
+  document.getElementById("conns-body").innerHTML = conns.map((c) => `
+    <tr class="border-t" style="border-color:var(--border-color)">
+      <td class="py-2 text-xs">${c.user_id}</td>
+      <td class="py-2">${c.broker_type.toUpperCase()}</td>
+      <td class="py-2"><span class="badge ${c.status === 'connected' ? 'badge-success' : 'badge-danger'}">${c.status}</span></td>
+      <td class="py-2 text-xs" style="color:var(--danger)">${c.last_error || ''}</td>
+      <td class="py-2 text-xs" style="color:var(--text-secondary)">${c.last_checked ? new Date(c.last_checked).toLocaleString() : ''}</td>
+    </tr>
+  `).join("");
+}
+
+async function loadLogs() {
+  const logs = await ORVO_API.get("/api/admin/logs?limit=100");
+  document.getElementById("logs-body").innerHTML = logs.map((l) => `
+    <tr class="border-t" style="border-color:var(--border-color)">
+      <td class="py-2 text-xs" style="color:var(--text-secondary)">${new Date(l.created_at).toLocaleString()}</td>
+      <td class="py-2">${l.action}</td>
+      <td class="py-2 text-xs">${l.detail || ''}</td>
+      <td class="py-2"><span class="badge ${l.level === 'error' ? 'badge-danger' : l.level === 'warning' ? 'badge-warning' : 'badge-neutral'}">${l.level}</span></td>
+    </tr>
+  `).join("");
+}
+
+(async () => {
+  const user = await orvoInitAppShell({ requireAdmin: true });
+  if (!user) return;
+  await Promise.all([loadHealth(), loadUsers(), loadConnections(), loadLogs()]);
+  setInterval(loadHealth, 20000);
+})();
+</script>
+<script src="/assets/js/splash.js"></script>
+</body>
+</html>

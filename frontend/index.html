@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORVO — AI Trading Platform</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%233b82f6%22>O</text></svg>">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="/assets/js/theme.js"></script>
+</head>
+<body>
+
+<div id="orvo-splash">
+  <div class="orvo-logo-text">ORVO</div>
+  <div class="orvo-splash-sub">AI Trading Platform</div>
+</div>
+
+<nav class="flex items-center justify-between px-8 py-5 border-b" style="border-color:var(--border-color)">
+  <div class="text-2xl font-extrabold tracking-widest" style="color:var(--accent)">ORVO</div>
+  <div class="flex items-center gap-4">
+    <button onclick="ORVO_THEME.toggle()" class="btn-secondary" data-theme-icon>🌙</button>
+    <a href="/login.html" class="btn-secondary">Log In</a>
+    <a href="/signup.html" class="btn-primary">Get Started</a>
+  </div>
+</nav>
+
+<main class="max-w-5xl mx-auto px-6 py-24 text-center">
+  <span class="badge badge-neutral mb-6"><span class="pulse-dot mr-2"></span>Live market data connected</span>
+  <h1 class="text-5xl md:text-6xl font-extrabold mt-6 leading-tight">
+    Trade smarter with <span style="color:var(--accent)">real</span> AI market analysis
+  </h1>
+  <p class="text-lg mt-6" style="color:var(--text-secondary)">
+    ORVO analyzes trend, structure, order blocks, liquidity, and volatility in real time,
+    explains every recommendation in plain English, and enforces the risk rules you set —
+    connected directly to your own broker account.
+  </p>
+  <div class="flex items-center justify-center gap-4 mt-10">
+    <a href="/signup.html" class="btn-primary text-lg px-8 py-3">Create Free Account</a>
+    <a href="/login.html" class="btn-secondary text-lg px-8 py-3">I already have an account</a>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-20 text-left">
+    <div class="stat-card">
+      <div class="text-sm" style="color:var(--text-secondary)">AI Engine</div>
+      <div class="font-semibold mt-1">Trend, structure, BOS/CHOCH, FVGs, order blocks — explained</div>
+    </div>
+    <div class="stat-card">
+      <div class="text-sm" style="color:var(--text-secondary)">Risk Management</div>
+      <div class="font-semibold mt-1">Daily loss limits, drawdown caps, position sizing, trailing stops</div>
+    </div>
+    <div class="stat-card">
+      <div class="text-sm" style="color:var(--text-secondary)">Broker Connected</div>
+      <div class="font-semibold mt-1">Trade directly through your own MT5 account — your credentials, your control</div>
+    </div>
+    <div class="stat-card">
+      <div class="text-sm" style="color:var(--text-secondary)">Full Transparency</div>
+      <div class="font-semibold mt-1">Every trade recommendation comes with a written explanation, not a black box</div>
+    </div>
+  </div>
+</main>
+
+<footer class="text-center py-8 text-sm" style="color:var(--text-muted)">
+  ORVO does not guarantee trading profits. Trading involves substantial risk of loss.
+</footer>
+
+<script src="/assets/js/splash.js"></script>
+</body>
+</html>

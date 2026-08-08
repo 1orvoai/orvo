@@ -1,0 +1,37 @@
+services:
+  orvo:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: orvo_app
+    ports:
+      - "8000:8000"
+    env_file:
+      - ../backend/.env
+    volumes:
+      - orvo_sqlite_data:/app/backend
+    restart: unless-stopped
+    # Uncomment to use the bundled Postgres service instead of SQLite:
+    # depends_on:
+    #   - postgres
+    # environment:
+    #   - DATABASE_URL=postgresql+psycopg2://orvo:orvo_password@postgres:5432/orvo
+
+  # Optional PostgreSQL service — disabled by default (SQLite requires zero setup).
+  # Uncomment this whole block to use Postgres instead.
+  # postgres:
+  #   image: postgres:16-alpine
+  #   container_name: orvo_postgres
+  #   environment:
+  #     POSTGRES_USER: orvo
+  #     POSTGRES_PASSWORD: orvo_password
+  #     POSTGRES_DB: orvo
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - orvo_postgres_data:/var/lib/postgresql/data
+  #   restart: unless-stopped
+
+volumes:
+  orvo_sqlite_data:
+  # orvo_postgres_data:

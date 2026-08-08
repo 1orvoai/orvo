@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings — ORVO</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="/assets/js/theme.js"></script>
+</head>
+<body>
+
+<div id="orvo-splash">
+  <div class="orvo-logo-text">ORVO</div>
+  <div class="orvo-splash-sub">AI Trading Platform</div>
+</div>
+
+<div class="flex min-h-screen">
+  <aside id="orvo-shell-sidebar" class="w-64 flex-shrink-0 border-r hidden md:flex md:flex-col" style="border-color:var(--border-color)"></aside>
+
+  <div class="flex-1 min-w-0">
+    <header id="orvo-shell-topbar" class="px-6 py-4 border-b" style="border-color:var(--border-color)"></header>
+
+    <main class="p-6 space-y-6 max-w-4xl">
+      <h1 class="text-2xl font-bold">Settings</h1>
+
+      <!-- Broker Connection -->
+      <div class="card p-6">
+        <h2 class="font-semibold mb-1">Broker Connection — MetaTrader 5</h2>
+        <p id="mt5-support-note" class="text-sm mb-4" style="color:var(--text-secondary)"></p>
+
+        <form id="mt5-connect-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-medium block mb-1">MT5 Login (account number)</label>
+            <input type="text" id="mt5-login" required class="input-field">
+          </div>
+          <div>
+            <label class="text-xs font-medium block mb-1">Server</label>
+            <input type="text" id="mt5-server" required class="input-field" placeholder="e.g. ICMarketsSC-Demo">
+          </div>
+          <div>
+            <label class="text-xs font-medium block mb-1">Password</label>
+            <input type="password" id="mt5-password" required class="input-field">
+          </div>
+          <div>
+            <label class="text-xs font-medium block mb-1">Label</label>
+            <input type="text" id="mt5-label" class="input-field" placeholder="My Live Account">
+          </div>
+          <div class="md:col-span-2">
+            <button type="submit" id="mt5-connect-btn" class="btn-primary">Connect MT5 Account</button>
+          </div>
+        </form>
+
+        <div class="mt-6">
+          <h3 class="text-sm font-semibold mb-2">Connected Accounts</h3>
+          <div id="broker-connections-list" class="space-y-2"></div>
+        </div>
+      </div>
+
+      <!-- Risk Settings -->
+      <div class="card p-6">
+        <h2 class="font-semibold mb-4">Risk Management</h2>
+        <form id="risk-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-medium block mb-1">Risk % Per Trade</label>
+            <input type="number" step="0.1" id="risk_percent_per_trade" class="input-field">
+          </div>
+          <div>
+            <label class="text-xs font-medium block mb-1">Daily Loss Limit (%)</label>
+            <input type="number" step="0.1" id="daily_loss_limit_percent" class="input-field">
+          </div>
+          <div>
+            <label class="text-xs font-medium block mb-1">Daily Profit Target (%)</label>
+            <input type="number" step="0.1" id="daily_profit_target_percent" class="input-field">
+          </div>
+          <div>
+            <label class="text-xs font-medium block mb-1">Max Drawdown (%)</label>
+            <input type="number" step="0.1" id="max_drawdown_percent" class="input-field">
+          </div>
+          <div>
+            <label class="text-xs font-medium block mb-1">Max Open Trades</label>
+            <input type="number" step="1" id="max_open_trades" class="input-field">
+          </div>
+          <div>
+            <label class="text-xs font-medium block mb-1">Default Stop Loss (pips)</label>
+            <input type="number" step="1" id="default_stop_loss_pips" class="input-field">
+          </div>
+          <div>
+            <label class="text-xs font-medium block mb-1">Default Take Profit (pips)</label>
+            <input type="number" step="1" id="default_take_profit_pips" class="input-field">
+          </div>
+          <div>
+            <label class="text-xs font-medium block mb-1">Trailing Stop (pips)</label>
+            <input type="number" step="1" id="trailing_stop_pips" class="input-field">
+          </div>
+          <div>
+            <label class="text-xs font-medium block mb-1">Breakeven Trigger (pips)</label>
+            <input type="number" step="1" id="breakeven_trigger_pips" class="input-field">
+          </div>
+
+          <div class="md:col-span-2 space-y-2 pt-2">
+            <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="use_trailing_stop"> Enable trailing stop</label>
+            <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="use_breakeven"> Enable auto-breakeven</label>
+            <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="auto_close_on_daily_loss"> Auto-close all trades when daily loss limit is hit</label>
+            <label class="flex items-center gap-2 text-sm"><input type="checkbox" id="auto_trading_enabled"> Enable AI auto-trading</label>
+          </div>
+
+          <div class="md:col-span-2">
+            <button type="submit" class="btn-primary">Save Risk Settings</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Lot Calculator -->
+      <div class="card p-6">
+        <h2 class="font-semibold mb-4">Lot Size Calculator</h2>
+        <form id="lot-calc-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <div>
+            <label class="text-xs font-medium block mb-1">Balance</label>
+            <input type="number" id="calc-balance" class="input-field" value="10000">
+          </div>
+          <div>
+            <label class="text-xs font-medium block mb-1">Risk %</label>
+            <input type="number" step="0.1" id="calc-risk" class="input-field" value="1">
+          </div>
+          <div>
+            <label class="text-xs font-medium block mb-1">SL (pips)</label>
+            <input type="number" id="calc-sl" class="input-field" value="50">
+          </div>
+          <button type="submit" class="btn-secondary">Calculate</button>
+        </form>
+        <div id="lot-calc-result" class="mt-4 text-sm"></div>
+      </div>
+
+      <!-- Theme -->
+      <div class="card p-6">
+        <h2 class="font-semibold mb-4">Appearance</h2>
+        <div class="flex gap-3">
+          <button id="theme-dark-btn" class="btn-secondary">🌙 Dark Mode</button>
+          <button id="theme-light-btn" class="btn-secondary">☀️ Light Mode</button>
+        </div>
+      </div>
+
+      <!-- API / News -->
+      <div class="card p-6">
+        <h2 class="font-semibold mb-2">Economic Calendar</h2>
+        <p class="text-sm" style="color:var(--text-secondary)">Configure a news API key in your backend .env to enable this — see <code>backend/.env.example</code>.</p>
+        <div id="news-status" class="mt-3 text-sm"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/app-shell.js"></script>
+<script src="/assets/js/settings.js"></script>
+<script src="/assets/js/splash.js"></script>
+</body>
+</html>

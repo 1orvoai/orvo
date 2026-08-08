@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — ORVO</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="/assets/js/theme.js"></script>
+</head>
+<body>
+
+<div id="orvo-splash">
+  <div class="orvo-logo-text">ORVO</div>
+  <div class="orvo-splash-sub">AI Trading Platform</div>
+</div>
+
+<div class="flex min-h-screen">
+  <aside id="orvo-shell-sidebar" class="w-64 flex-shrink-0 border-r hidden md:flex md:flex-col" style="border-color:var(--border-color)"></aside>
+
+  <div class="flex-1 min-w-0">
+    <header id="orvo-shell-topbar" class="px-6 py-4 border-b" style="border-color:var(--border-color)"></header>
+
+    <main class="p-6 space-y-6">
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold">Dashboard</h1>
+        <div id="broker-badge" class="badge badge-warning">No broker connected</div>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="stat-cards">
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Balance</div><div id="stat-balance" class="text-2xl font-bold mt-1 skeleton h-8"></div></div>
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Equity</div><div id="stat-equity" class="text-2xl font-bold mt-1 skeleton h-8"></div></div>
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Margin</div><div id="stat-margin" class="text-2xl font-bold mt-1 skeleton h-8"></div></div>
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Free Margin</div><div id="stat-free-margin" class="text-2xl font-bold mt-1 skeleton h-8"></div></div>
+
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Daily P/L</div><div id="stat-daily-pl" class="text-2xl font-bold mt-1 skeleton h-8"></div></div>
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Total Profit</div><div id="stat-total-profit" class="text-2xl font-bold mt-1 skeleton h-8"></div></div>
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Win Rate</div><div id="stat-win-rate" class="text-2xl font-bold mt-1 skeleton h-8"></div></div>
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Risk Score</div><div id="stat-risk-score" class="text-2xl font-bold mt-1 skeleton h-8"></div></div>
+
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Open Trades</div><div id="stat-open-trades" class="text-2xl font-bold mt-1 skeleton h-8"></div></div>
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Trades Today</div><div id="stat-trades-today" class="text-2xl font-bold mt-1 skeleton h-8"></div></div>
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">AI Confidence (BTCUSDT)</div><div id="stat-ai-confidence" class="text-2xl font-bold mt-1 skeleton h-8"></div></div>
+        <div class="stat-card"><div class="text-sm" style="color:var(--text-secondary)">Auto Trading</div><div id="stat-auto-trading" class="text-2xl font-bold mt-1 skeleton h-8"></div></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="card p-5 lg:col-span-2">
+          <h2 class="font-semibold mb-4">Equity Curve</h2>
+          <canvas id="equity-chart" height="110"></canvas>
+        </div>
+        <div class="card p-5">
+          <h2 class="font-semibold mb-4">Live Watchlist</h2>
+          <div id="watchlist" class="space-y-3"></div>
+        </div>
+      </div>
+
+      <div class="card p-5">
+        <h2 class="font-semibold mb-4">Trade History</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left" style="color:var(--text-secondary)">
+                <th class="pb-2">Symbol</th><th class="pb-2">Side</th><th class="pb-2">Lot</th>
+                <th class="pb-2">Entry</th><th class="pb-2">Exit</th><th class="pb-2">Profit</th>
+                <th class="pb-2">Status</th><th class="pb-2">Opened</th>
+              </tr>
+            </thead>
+            <tbody id="trade-history-body"></tbody>
+          </table>
+          <div id="trade-history-empty" class="text-center py-8 hidden" style="color:var(--text-muted)">No trades yet.</div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/app-shell.js"></script>
+<script src="/assets/js/dashboard.js"></script>
+<script src="/assets/js/splash.js"></script>
+</body>
+</html>
