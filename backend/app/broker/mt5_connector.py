@@ -48,7 +48,18 @@ def is_supported() -> bool:
 
 
 def connect() -> Dict:
-    return _get("/mt5/status")
+    result = _get("/mt5/status")
+
+    if result.get("connected") is True:
+        return {
+            "success": True,
+            **result,
+        }
+
+    return {
+        "success": False,
+        **result,
+    }
 
 
 def status() -> Dict:
