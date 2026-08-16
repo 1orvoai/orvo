@@ -125,4 +125,12 @@ def shutdown() -> Dict:
 
 
 def get_account_snapshot() -> Dict:
-    return _get("/mt5/status")    
+    result = _get("/mt5/status")
+
+    return {
+        "balance": float(result.get("balance", 0)),
+        "equity": float(result.get("equity", 0)),
+        "margin": float(result.get("margin", 0)),
+        "free_margin": float(result.get("free_margin", 0)),
+        "currency": result.get("currency", "USD"),
+    }
