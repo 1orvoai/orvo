@@ -1,4 +1,4 @@
-const BINANCE_SYMBOLS = new Set(["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT"]);
+const MT5_SYMBOLS = new Set(["BTCUSDTm", "GBPUSDm", "EURUSDm", "XAUUSDm"]);
 
 async function loadBrokerConnections() {
   const select = document.getElementById("broker-connection-select");
@@ -21,15 +21,6 @@ async function loadAIAnalysis() {
   const symbol = document.getElementById("symbol-select").value;
   const timeframe = document.getElementById("timeframe-select").value;
   const panel = document.getElementById("ai-panel");
-
-  if (!BINANCE_SYMBOLS.has(symbol)) {
-    panel.innerHTML = `<p class="text-sm" style="color:var(--text-muted)">
-      AI analysis currently runs on live crypto data (Binance). Forex/Gold/Index analysis
-      needs a market-data provider with a license for that data (see README for how to add one) —
-      it isn't faked here.
-    </p>`;
-    return;
-  }
 
   panel.innerHTML = `<div class="skeleton h-24"></div>`;
   try {
@@ -109,8 +100,6 @@ async function submitOrder(side) {
     return;
   }
   const symbol = document.getElementById("symbol-select").value;
-  if (!BINANCE_SYMBOLS.has(symbol)) {
-    orvoShowToast("Live order routing in this build targets crypto pairs via Binance-priced symbols traded through your connected MT5 account. Confirm the symbol name matches your broker's listing.", "warning");
   }
   const lotSize = parseFloat(document.getElementById("lot-size").value);
   const sl = parseFloat(document.getElementById("order-sl").value);
