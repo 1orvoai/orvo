@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 
 from ..ai import signal_engine, technical_analysis as ta
-from ..broker import binance_client
+from ..broker import mt5_connector
 from ..deps import get_current_user
 from ..models import User
 
@@ -15,7 +15,7 @@ async def analyze(
     current_user: User = Depends(get_current_user),
 ):
     try:
-        candles = await binance_client.get_klines(symbol, timeframe, 200)
+        candles = mt5_connector.get_klines(symbol, timeframe, 200)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Could not fetch market data for analysis: {e}")
 
