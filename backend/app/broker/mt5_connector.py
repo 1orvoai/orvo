@@ -1,5 +1,5 @@
 import os
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 import requests
 
@@ -10,10 +10,23 @@ MT5_BRIDGE_URL = os.getenv(
 )
 
 
-def _get(endpoint: str) -> Dict:
+TIMEFRAME_MAP = {
+    "1m": "1m",
+    "5m": "5m",
+    "15m": "15m",
+    "30m": "30m",
+    "1h": "1h",
+    "4h": "4h",
+    "1d": "1d",
+    "1w": "1w",
+}
+
+
+def _get(endpoint: str, params: Optional[Dict] = None) -> Dict:
     try:
         response = requests.get(
             f"{MT5_BRIDGE_URL}{endpoint}",
+            params=params,
             timeout=15
         )
         response.raise_for_status()
@@ -64,6 +77,45 @@ def connect() -> Dict:
 
 def status() -> Dict:
     return _get("/mt5/status")
+
+
+def get_klines(
+    symbol: str,
+    interval: str = "1h",
+    limit: int = 200
+) -> List[Dict]:
+    """
+    Get OHLCV candles from MetaTrader 5 through the ORVO MT5 bridge.
+
+    Returns candles in the same structure expected by ORVO's
+    technical-analysis engine.
+    """
+
+    interval = interval.lower()
+
+    if interval not in TIMEFRAME_MAP:
+        raise ValueError(
+            f"Unsupported timeframe: {interval}"
+        )
+
+    result = _get(
+        "/mt5/candles",
+        params={
+            "symbol": symbol.upper(),
+            "timeframe": TIMEFRAME_MAP[interval],
+            "limit": limit,
+        }
+    )
+
+    if result.get("success") is not True:
+        raise RuntimeError(
+            result.get(
+                "error",
+                "Failed to retrieve MT5 candles"
+            )
+        )
+
+    return result.get("candles", [])
 
 
 def place_order(
