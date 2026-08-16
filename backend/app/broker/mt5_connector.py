@@ -122,3 +122,7 @@ def modify_order(
 
 def shutdown() -> Dict:
     return {"success": True}
+
+
+def get_account_snapshot() -> Dict:
+    return _get("/mt5/status")    
