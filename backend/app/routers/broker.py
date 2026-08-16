@@ -26,7 +26,7 @@ def mt5_connect(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    result = mt5_connector.connect(payload.login, payload.password, payload.server, payload.terminal_path)
+    result = mt5_connector.connect()
 
     creds_json = json.dumps({
         "login": payload.login,
