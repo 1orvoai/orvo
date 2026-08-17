@@ -56,7 +56,7 @@ async def economic_calendar():
                 ]
             elif settings.NEWS_API_PROVIDER == "fmp":
                 resp = await client.get(
-                    "https://financialmodelingprep.com/api/v3/economic_calendar",
+                    "https://financialmodelingprep.com/stable/economic-calendar"
                     params={"from": str(today), "to": str(end), "apikey": settings.NEWS_API_KEY},
                 )
                 resp.raise_for_status()
