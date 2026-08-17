@@ -63,7 +63,7 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
 
     token = create_access_token(subject=user.id, extra={"role": user.role.value})
     log_action(db, user.id, "login", f"Login from email: {user.email}")
-    return TokenResponse(access_token=token, expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60)
+    return TokenResponse(access_token=token, expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 525600)
 
 
 @router.post("/forgot-password")
