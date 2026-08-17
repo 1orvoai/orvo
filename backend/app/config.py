@@ -58,8 +58,8 @@ class Settings:
 
     # --- News / economic calendar (optional — requires your own API key) ---
     # Get a free key at https://financialmodelingprep.com or https://finnhub.io
-    NEWS_API_PROVIDER: str = os.getenv("NEWS_API_PROVIDER", "")  # "fmp" or "finnhub" or ""
-    NEWS_API_KEY: str = os.getenv("NEWS_API_KEY", "")
+    NEWS_API_PROVIDER: str = os.getenv("NEWS_API_PROVIDER", "finnhub")  # "fmp" or "finnhub" or ""
+    NEWS_API_KEY: str = os.getenv("NEWS_API_KEY", "da1cmvhr01qo0t0m0ip0da1cmvhr01qo0t0m0ipg")
 
     # --- MT5 broker integration ---
     # The MetaTrader5 python package only works on Windows with a MT5 terminal installed.
